@@ -90,7 +90,8 @@ public class XLSBeans {
                 }
             }
 
-            for (Field field : clazz.getFields()) {
+            for (Field field : clazz.getDeclaredFields()) {
+                field.setAccessible(true);
                 for (Annotation ann : reader.getAnnotations(clazz, field)) {
                     FieldProcessor processor = FieldProcessorFactory.getProcessor(ann);
                     if (processor != null) {

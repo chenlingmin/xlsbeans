@@ -42,8 +42,9 @@ public class Utils {
     protected static Field[] getMapColumnFields(Object obj, AnnotationReader reader) throws Exception {
 
         List<Field> result = new ArrayList<Field>();
-        Field[] fields = obj.getClass().getFields();
+        Field[] fields = obj.getClass().getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
+            fields[i].setAccessible(true);
             Annotation[] anns = reader.getAnnotations(obj.getClass(), fields[i]);
 
             for (int j = 0; j < anns.length; j++) {
@@ -95,7 +96,7 @@ public class Utils {
 
     protected static Field[] getColumnFields(Object obj, String name, AnnotationReader reader, XLSBeansConfig config) throws Exception {
         List<Field> result = new ArrayList<Field>();
-        Field[] fields = obj.getClass().getFields();
+        Field[] fields = obj.getClass().getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
             Annotation[] anns = reader.getAnnotations(obj.getClass(), fields[i]);
             for (int j = 0; j < anns.length; j++) {
@@ -186,6 +187,7 @@ public class Utils {
      * @throws Exception
      */
     public static void setField(Field field, Object obj, String value, XLSBeansConfig config) throws Exception {
+        field.setAccessible(true);
         Class<?> type = field.getType();
         Object valueObject = config.getConverter(type).convert(value, config);
         if (valueObject != null) {
@@ -330,9 +332,10 @@ public class Utils {
      */
     protected static Field[] getFieldsWithAnnotation(Object tableObj, AnnotationReader reader, Class<?> clazz) throws Exception {
         List<Field> result = new ArrayList<Field>();
-        Field[] fields = tableObj.getClass().getFields();
+        Field[] fields = tableObj.getClass().getDeclaredFields();
 
         for (Field field : fields) {
+            field.setAccessible(true);
             // find annotation
             Annotation[] ans = reader.getAnnotations(tableObj.getClass(), field);
             for (Annotation an : ans) {
