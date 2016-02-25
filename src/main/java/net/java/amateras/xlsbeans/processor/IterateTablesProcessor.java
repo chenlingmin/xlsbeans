@@ -1,5 +1,14 @@
 package net.java.amateras.xlsbeans.processor;
 
+import net.java.amateras.xlsbeans.NeedPostProcess;
+import net.java.amateras.xlsbeans.Utils;
+import net.java.amateras.xlsbeans.XLSBeansConfig;
+import net.java.amateras.xlsbeans.XLSBeansException;
+import net.java.amateras.xlsbeans.annotation.*;
+import net.java.amateras.xlsbeans.xml.AnnotationReader;
+import net.java.amateras.xlsbeans.xssfconverter.WCell;
+import net.java.amateras.xlsbeans.xssfconverter.WSheet;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -7,21 +16,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.java.amateras.xlsbeans.NeedPostProcess;
-import net.java.amateras.xlsbeans.Utils;
-import net.java.amateras.xlsbeans.XLSBeansConfig;
-import net.java.amateras.xlsbeans.XLSBeansException;
-import net.java.amateras.xlsbeans.annotation.HorizontalRecords;
-import net.java.amateras.xlsbeans.annotation.HorizontalRecordsForIterateTable;
-import net.java.amateras.xlsbeans.annotation.IterateTables;
-import net.java.amateras.xlsbeans.annotation.LabelledCell;
-import net.java.amateras.xlsbeans.annotation.LabelledCellForIterateTable;
-import net.java.amateras.xlsbeans.xml.AnnotationReader;
-import net.java.amateras.xlsbeans.xssfconverter.WCell;
-import net.java.amateras.xlsbeans.xssfconverter.WSheet;
-
 /**
- *
  * @author Mitsuyoshi Hasegawa
  * @see net.java.amateras.xlsbeans.annotation.IterateTables
  */
@@ -44,12 +39,12 @@ public class IterateTablesProcessor implements FieldProcessor {
             setter.invoke(obj, new Object[]{value});
 
         } else if (setterArgClzArray[0].isArray()) {
-        	Class<?> type = setterArgClzArray[0].getComponentType();
-        	Object array = Array.newInstance(type, value.size());
-        	for(int i = 0; i < value.size(); i++){
-        		Array.set(array, i, value.get(i));
-        	}
-        	setter.invoke(obj, new Object[] { array });
+            Class<?> type = setterArgClzArray[0].getComponentType();
+            Object array = Array.newInstance(type, value.size());
+            for (int i = 0; i < value.size(); i++) {
+                Array.set(array, i, value.get(i));
+            }
+            setter.invoke(obj, new Object[]{array});
 
         } else {
             throw new XLSBeansException("Arguments of '" + setter.toString() + "' is invalid.");
@@ -57,7 +52,7 @@ public class IterateTablesProcessor implements FieldProcessor {
     }
 
 
-	public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
+    public void doProcess(WSheet wSheet, Object obj, Field field, Annotation ann, AnnotationReader reader,
                           XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
 
         IterateTables iterateTables = (IterateTables) ann;
@@ -70,17 +65,17 @@ public class IterateTablesProcessor implements FieldProcessor {
             field.set(obj, value);
 
         } else if (fieldType.isArray()) {
-        	Class<?> type = fieldType.getComponentType();
-        	Object array = Array.newInstance(type, value.size());
-        	for(int i = 0; i < value.size(); i++){
-        		Array.set(array, i, value.get(i));
-        	}
-        	field.set(obj, array);
+            Class<?> type = fieldType.getComponentType();
+            Object array = Array.newInstance(type, value.size());
+            for (int i = 0; i < value.size(); i++) {
+                Array.set(array, i, value.get(i));
+            }
+            field.set(obj, array);
 
         } else {
             throw new XLSBeansException("Arguments of '" + field.toString() + "' is invalid.");
         }
-	}
+    }
 
     protected List<?> createTables(WSheet wSheet, IterateTables iterateTables, AnnotationReader reader,
                                    XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
@@ -116,11 +111,11 @@ public class IterateTablesProcessor implements FieldProcessor {
         LabelledCellProcessor labelledCellProcessor = new LabelledCellProcessor();
         for (Object property : properties) {
             LabelledCell ann = null;
-            if(property instanceof Method){
-            	ann = reader.getAnnotation(tableObj.getClass(), (Method) property, LabelledCell.class);
+            if (property instanceof Method) {
+                ann = reader.getAnnotation(tableObj.getClass(), (Method) property, LabelledCell.class);
 
-            } else if(property instanceof Field){
-            	ann = reader.getAnnotation(tableObj.getClass(), (Field) property, LabelledCell.class);
+            } else if (property instanceof Field) {
+                ann = reader.getAnnotation(tableObj.getClass(), (Field) property, LabelledCell.class);
             }
 
             WCell titleCell = null;
@@ -136,17 +131,17 @@ public class IterateTablesProcessor implements FieldProcessor {
 
             LabelledCell labelledCell = new LabelledCellForIterateTable(ann, titleCell.getRow(), titleCell.getColumn());
 
-            if(property instanceof Method){
-	            labelledCellProcessor.doProcess(wSheet, tableObj, (Method) property, labelledCell, reader, config, needPostProcess);
+            if (property instanceof Method) {
+                labelledCellProcessor.doProcess(wSheet, tableObj, (Method) property, labelledCell, reader, config, needPostProcess);
 
-            } else if(property instanceof Field){
-	            labelledCellProcessor.doProcess(wSheet, tableObj, (Field) property, labelledCell, reader, config, needPostProcess);
+            } else if (property instanceof Field) {
+                labelledCellProcessor.doProcess(wSheet, tableObj, (Field) property, labelledCell, reader, config, needPostProcess);
             }
         }
     }
 
     protected void processMultipleTableCell(WSheet wSheet, Object tableObj, WCell headerCell, AnnotationReader reader,
-            IterateTables iterateTables, XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
+                                            IterateTables iterateTables, XLSBeansConfig config, List<NeedPostProcess> needPostProcess) throws Exception {
 
         List<Object> properties = Utils.getPropertiesWithAnnotation(tableObj, reader, HorizontalRecords.class);
 
@@ -161,23 +156,23 @@ public class IterateTablesProcessor implements FieldProcessor {
         HorizontalRecordsProcessor processor = new HorizontalRecordsProcessor();
         for (Object property : properties) {
             HorizontalRecords ann = null;
-            if(property instanceof Method){
-            	ann = reader.getAnnotation(tableObj.getClass(), (Method) property, HorizontalRecords.class);
+            if (property instanceof Method) {
+                ann = reader.getAnnotation(tableObj.getClass(), (Method) property, HorizontalRecords.class);
 
-            } else if(property instanceof Field){
-            	ann = reader.getAnnotation(tableObj.getClass(), (Field) property, HorizontalRecords.class);
+            } else if (property instanceof Field) {
+                ann = reader.getAnnotation(tableObj.getClass(), (Field) property, HorizontalRecords.class);
             }
 
             if (iterateTables.tableLabel().equals(ann.tableLabel())) {
-            	//
+                //
                 HorizontalRecords records = new HorizontalRecordsForIterateTable(ann, headerColumn, headerRow);
 
                 // horizontal record-mapping
-                if(property instanceof Method){
-	                processor.doProcess(wSheet, tableObj, (Method) property, records, reader, config, needPostProcess);
+                if (property instanceof Method) {
+                    processor.doProcess(wSheet, tableObj, (Method) property, records, reader, config, needPostProcess);
 
-                } else if(property instanceof Field){
-	                processor.doProcess(wSheet, tableObj, (Field) property, records, reader, config, needPostProcess);
+                } else if (property instanceof Field) {
+                    processor.doProcess(wSheet, tableObj, (Field) property, records, reader, config, needPostProcess);
                 }
             }
         }

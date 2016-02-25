@@ -3,13 +3,12 @@ package net.java.amateras.xlsbeans.xssfconverter;
 /**
  * Excel border-wrapper.
  * (Java Excel API Wrapper.)
- * 
- * @author Mitsuyoshi Hasegawa
  *
+ * @author Mitsuyoshi Hasegawa
  */
 public class WBorder {
 
-	private String description = null;
+    private String description = null;
     public static final WBorder NONE = new WBorder("none");
     public static final WBorder ALL = new WBorder("all");
     public static final WBorder TOP = new WBorder("top");
@@ -19,19 +18,19 @@ public class WBorder {
 
     /**
      * border-wrapper
-     * 
+     *
      * @param description border description
      */
     public WBorder(String description) {
-    	this.description = description;
+        this.description = description;
     }
-    
+
     /**
      * get border-description.
-     * 
+     *
      * @return border-description.
      */
     public String getDescription() {
-    	return description;
+        return description;
     }
 }

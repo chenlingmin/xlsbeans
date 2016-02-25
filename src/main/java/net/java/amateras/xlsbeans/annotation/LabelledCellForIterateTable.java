@@ -2,14 +2,10 @@ package net.java.amateras.xlsbeans.annotation;
 
 import java.lang.annotation.Annotation;
 
-import net.java.amateras.xlsbeans.annotation.LabelledCell;
-import net.java.amateras.xlsbeans.annotation.LabelledCellType;
-
 /**
- *
  * @author Mitsuyoshi Hasegawa
  */
-public class LabelledCellForIterateTable implements LabelledCell{
+public class LabelledCellForIterateTable implements LabelledCell {
 
     private String _label = null;
     private int _labelColumn = -1;
@@ -21,7 +17,7 @@ public class LabelledCellForIterateTable implements LabelledCell{
     private String _headerLabel = null;
     private int _skip = 0;
 
-    public LabelledCellForIterateTable (LabelledCell labelledCell, int labelRow, int labelColumn) {
+    public LabelledCellForIterateTable(LabelledCell labelledCell, int labelRow, int labelColumn) {
         this._label = "";
         this._labelColumn = labelColumn;
         this._labelRow = labelRow;
@@ -61,11 +57,11 @@ public class LabelledCellForIterateTable implements LabelledCell{
         return this._annotationType;
     }
 
-    public String headerLabel(){
+    public String headerLabel() {
         return this._headerLabel;
     }
 
     public int skip() {
-    	return this._skip;
+        return this._skip;
     }
 }

@@ -1,11 +1,11 @@
 package net.java.amateras.xlsbeans.xml;
 
+import ognl.ClassResolver;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-
-import ognl.ClassResolver;
 
 /**
  * ClassResolver loading from multiple ClassLoader in Ognl.
@@ -16,10 +16,10 @@ public class MultipleLoaderClassResolver implements ClassResolver {
 
     /**
      * Loads class from multiple ClassLoader.
-     *
+     * <p/>
      * If this method can not load target class,
      * it tries to add package java.lang(default package)
-     *  and load target class.
+     * and load target class.
      * Still, if it can not the class, throws ClassNotFoundException.
      * (behavior is put together on DefaultClassResolver.)
      *
@@ -39,7 +39,7 @@ public class MultipleLoaderClassResolver implements ClassResolver {
         }
         Class clazz = null;
         ClassNotFoundException lastCause = null;
-        for (Iterator<ClassLoader> it = loaders.iterator(); it.hasNext();) {
+        for (Iterator<ClassLoader> it = loaders.iterator(); it.hasNext(); ) {
             ClassLoader loader = it.next();
             try {
                 clazz = loader.loadClass(className);

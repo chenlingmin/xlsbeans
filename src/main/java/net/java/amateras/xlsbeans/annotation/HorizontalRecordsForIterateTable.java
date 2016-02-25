@@ -2,14 +2,10 @@ package net.java.amateras.xlsbeans.annotation;
 
 import java.lang.annotation.Annotation;
 
-import net.java.amateras.xlsbeans.annotation.HorizontalRecords;
-import net.java.amateras.xlsbeans.annotation.RecordTerminal;
-
 /**
- * 
  * @author Mitsuyoshi Hasegawa
  */
-public class HorizontalRecordsForIterateTable implements HorizontalRecords{
+public class HorizontalRecordsForIterateTable implements HorizontalRecords {
 
     private int _headerColumn = -1;
     private int _headerRow = -1;
@@ -22,11 +18,11 @@ public class HorizontalRecordsForIterateTable implements HorizontalRecords{
     private String _terminateLabel = null;
     private int _bottom = 1;
     private int _headerCount = 0;
-    
+
     public HorizontalRecordsForIterateTable(HorizontalRecords rec, int headerColumn, int headerRow) {
         this._headerColumn = headerColumn;
         this._headerRow = headerRow;
-        
+
         this._optional = rec.optional();
         this._range = rec.range();
         this._recordClass = rec.recordClass();
@@ -38,7 +34,7 @@ public class HorizontalRecordsForIterateTable implements HorizontalRecords{
         this._bottom = 1;
         this._headerCount = rec.headerLimit();
     }
-    
+
     public int headerColumn() {
         return this._headerColumn;
     }
@@ -70,16 +66,16 @@ public class HorizontalRecordsForIterateTable implements HorizontalRecords{
     public Class<? extends Annotation> annotationType() {
         return this._annotationType;
     }
-    
-    public String terminateLabel(){
+
+    public String terminateLabel() {
         return this._terminateLabel;
     }
 
-	public int bottom() {
-		return this._bottom;
-	}
-	
-	public int headerLimit(){
-		return this._headerCount;
-	}
+    public int bottom() {
+        return this._bottom;
+    }
+
+    public int headerLimit() {
+        return this._headerCount;
+    }
 }

@@ -17,7 +17,7 @@ public class XLSBeansConfig {
 
     private Map<Class<?>, TypeConverter> converters = new HashMap<Class<?>, TypeConverter>();
 
-    public XLSBeansConfig(){
+    public XLSBeansConfig() {
         converters.put(Integer.class, new IntegerTypeConverter());
         converters.put(Integer.TYPE, new IntegerTypeConverter());
         converters.put(Long.class, new LongTypeConverter());
@@ -65,13 +65,13 @@ public class XLSBeansConfig {
         this.regexLabelText = regexLabelText;
     }
 
-    public <T> void addTypeConverter(Class<T> clazz, TypeConverter<T> converter){
+    public <T> void addTypeConverter(Class<T> clazz, TypeConverter<T> converter) {
         converters.put(clazz, converter);
     }
 
-    public <T> TypeConverter<T> getConverter(Class<T> clazz){
+    public <T> TypeConverter<T> getConverter(Class<T> clazz) {
         TypeConverter<T> converter = converters.get(clazz);
-        if(converter != null){
+        if (converter != null) {
             return converter;
         }
         return converters.get(String.class);
