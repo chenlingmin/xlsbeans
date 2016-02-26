@@ -191,13 +191,26 @@ public class XLSBeans {
             WWorkbook w = WorkbookFinder.find(xlsIn, bookType);
 
             Sheet sheet = reader.getAnnotation(clazz, Sheet.class);
-            if (sheet == null) {
-                throw new XLSBeansException("Can't find @Sheet.");
-            }
             try {
-                WSheet[] jxlSheets = findSheet(w, sheet);
-                return loadSheet(clazz, jxlSheets[0], reader);
+                if (sheet != null) {
+                    WSheet[] jxlSheets = findSheet(w, sheet);
+                    return loadSheet(clazz, jxlSheets[0], reader);
 
+                } else {
+                    P p = clazz.newInstance();
+                    Field[] fields = clazz.getDeclaredFields();
+                    for (Field field : fields) {
+                        Class declaringClass = field.getType();
+                        sheet = reader.getAnnotation(declaringClass, Sheet.class);
+                        WSheet[] jxlSheets = findSheet(w, sheet);
+                        Object fieldValue = loadSheet(declaringClass, jxlSheets[0], reader);
+                        field.setAccessible(true);
+                        field.set(p, fieldValue);
+                    }
+                    if (sheet != null) {
+                        return p;
+                    }
+                }
             } catch (SheetNotFoundException ex) {
                 if (config.isIgnoreSheetNotFound()) {
                     return null;
@@ -205,11 +218,17 @@ public class XLSBeans {
                     throw ex;
                 }
             }
+
+            if (sheet == null) {
+                throw new XLSBeansException("Can't find @Sheet.");
+            }
+
         } catch (XLSBeansException ex) {
             throw ex;
         } catch (Exception ex) {
             throw new XLSBeansException(ex);
         }
+        return null;
     }
 
     /**
